@@ -7,14 +7,45 @@ var router = express.Router();
 
 // Index
 router.get('/', function(req, res) {
-	Post.find({}, function(err, posts) {
-		if (err) res.json(err);
-		res.render('posts/index', {posts: posts});
-	});
+
+	//현재 페이지
+	var curPage = req.param('curPage');
+	if (curPage == null) {
+		curPage = 1;
+	}
+
+	//skip 할 데이터 사이즈
+	var sizePerPage = 10;
+	var skipSize = (curPage-1) * sizePerPage;
+	var pageNum = 1;
+
+	Post.count({}, function(err, totalCount){
+		if(err) return res.json(err);
+
+		pageNum = Math.ceil(totalCount/sizePerPage);
+
+		Post.find({}).sort({createdAt:-1}).skip(skipSize).limit(sizePerPage).exec(
+			function(err,posts){
+				if(err) return res.json(err);
+
+				res.render('posts/index',
+					{
+						posts: posts,
+						pageNum : pageNum,
+						curPage : curPage
+					}
+				);
+			});
+
+		// Post.find({}, function(err, posts) {
+		// 	if (err) res.json(err);
+		// 	res.render('posts/index', {posts: posts});
+		// });
+
 });
 
 // New
-router.get('/new', function(req, res) {	
+router.get('/new', function(req, res) {
 	res.render('posts/new');
 });
 
