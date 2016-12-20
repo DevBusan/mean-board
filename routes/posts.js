@@ -41,7 +41,7 @@ router.get('/', function(req, res) {
 		// 	if (err) res.json(err);
 		// 	res.render('posts/index', {posts: posts});
 		// });
-
+	});
 });
 
 // New
