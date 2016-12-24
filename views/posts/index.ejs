@@ -36,21 +36,29 @@
 			</tbody>
 		</table>
 
+		<div style="text-align: center">
 		<ul class="pagination pagination-sm">
+			<li><a href="/posts?curPage=1"><span class="glyphicon glyphicon-step-backward"></span></a></li>
+			<li><a href="/posts?curPage=<%=(startPage-1) == 0 ? 1 : (startPage-1) %>"><span class="glyphicon glyphicon-backward"></span></a></li>
+
 				<%
-					for (var i = 1; i <= pageNum; i++) {
+					for (var i = startPage; i <= endPage; i++) {
 						if (i == curPage) {
 				%>
 						<li class="active"><a href="#"><%=i%></a></li>
 				<%
-			} else {
+						} else {
 				%>
-					<li><a href="/posts?curPage=<%=i%>"><%=i%></a></li>
+						<li><a href="/posts?curPage=<%=i%>"><%=i%></a></li>
 			 	<%
-			}
+						}
 					}
 				%>
+
+				<li><a href="/posts?curPage=<%=endPage+1 %>"><span class="glyphicon glyphicon-forward"></span></a></li>
+				<li><a href="/posts?curPage=<%=maxPage == 1 ? 1 : maxPage %>"><span class="glyphicon glyphicon-step-forward"></span></a></li>
 			</ul>
+		</div>
 
 		<div class="pull-right">
 			<a href="/posts/new" class="btn btn-default">New</a>
