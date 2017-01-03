@@ -66,11 +66,11 @@
 						<% tasks.doneTasks.forEach(function(task) { %>
 						<div class="input-group">
 							<li class="list-group-item"><%= task.my_task %></li>
-							<span class="input-group-btn">	
+							<!--<span class="input-group-btn">	
 								<form action="/tasks/<%= task._id %>?_method=delete" method="post">								
 									<button class="btn btn-danger" type="submit"><strong><span class="glyphicon glyphicon-check" aria-hidden="true"></span></strong></button>					
 								</form>
-							</span>
+							</span>-->
 						</div>
 						<% }) %>
 					</ul>
