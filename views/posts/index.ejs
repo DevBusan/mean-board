@@ -55,8 +55,8 @@
 					}
 				%>
 
-				<li><a href="/posts?curPage=<%=endPage+1 %>"><span class="glyphicon glyphicon-forward"></span></a></li>
-				<li><a href="/posts?curPage=<%=maxPage == 1 ? 1 : maxPage %>"><span class="glyphicon glyphicon-step-forward"></span></a></li>
+				<li><a href="/posts?curPage=<%=endPage == maxPage ? maxPage : endPage + 1 %>"><span class="glyphicon glyphicon-forward"></span></a></li>
+				<li><a href="/posts?curPage=<%=maxPage %>"><span class="glyphicon glyphicon-step-forward"></span></a></li>
 				
 			</ul>
 		</div>
