@@ -30,7 +30,7 @@ router.get('/', function(req, res) {
 		Post.find({}).sort({createdAt:-1}).skip(skipSize).limit(sizePerPage).exec(
 			function(err,posts){
 				if(err) return res.json(err);
-				
+ 			 
 				res.render('posts/index',
 					{
 						posts: posts,
