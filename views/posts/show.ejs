@@ -50,18 +50,18 @@
 
             <div class="well">
                 <h4>댓글작성</h4>
-                <form action="/posts/comment/<%= post._id%>" method="POST" role="form" class="clearfix">
+                <form id="commentForm" action="/posts/comment/<%= post._id%>" method="POST" role="form" class="clearfix">
                     <div class="col-md-6 form-group">
                         <label class="sr-only" for="com_name">Name</label>
-                        <input type="text" class="form-control" id="com_name" placeholder="Name">
+                        <input type="text" class="form-control" id="com_name" name="com_name" placeholder="Name">
                     </div>
                     <div class="col-md-6 form-group">
                         <label class="sr-only" for="com_email">Email</label>
-                        <input type="email" class="form-control" id="com_email" placeholder="Email">
+                        <input type="email" class="form-control" id="com_email" name="com_email" placeholder="Email">
                     </div>
                     <div class="col-md-12 form-group">
                         <label class="sr-only" for="com_memo">Comment</label>
-                        <textarea class="form-control" id="com_memo" placeholder="Comment"></textarea>
+                        <textarea class="form-control" id="com_memo" name="com_memo" placeholder="Comment"></textarea>
                     </div>
                     <div class="col-md-12 form-group text-right">
                         <button type="submit" class="btn btn-primary">저장</button>
@@ -73,7 +73,9 @@
             <div class="container">
                 <div class="row">
                     <div class="col-sm-12">
-                    <h3>댓글</h3>
+                    <% if( post.comments.length != 0) { %>                                            
+                        <h3>댓글</h3>
+                    <% } %>                    
                     </div>
                 </div>
                 
@@ -88,36 +90,15 @@
                     <div class="col-sm-5">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <strong><%=post.comments[i].writer %></strong> <span class="text-muted">commented 5 days ago</span>
+                                <strong><%= post.comments[i].writer %></strong><span class="text-muted"><%= post.comments[i].writeDate %></span>
                             </div>
                             <div class="panel-body">
-                                Panel content
+                                <%= post.comments[i].memo %>
                             </div>
                         </div>
                     </div>
                 </div>                
-                <% } %>
-
-                
-
-                <div class="row">
-                    <div class="col-sm-1">
-                        <div class="thumbnail" style="text-align: center">
-                            <!--<img class="img-responsive user-photo" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png">-->
-                            <span class="glyphicon glyphicon-user" style="font-size:30px"></span>
-                        </div>
-                    </div>
-                    <div class="col-sm-5">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <strong>myusername</strong> <span class="text-muted">commented 5 days ago</span>
-                            </div>
-                            <div class="panel-body">
-                                Panel content
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <% } %>              
 
             </div><!-- /container -->
             <p></p>

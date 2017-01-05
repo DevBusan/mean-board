@@ -56,9 +56,6 @@ router.get('/new', function(req, res) {
 router.get('/:id', function(req, res) {
     Post.findOne({ _id: req.params.id }, function(err, post) {
         if (err) res.json(err);
-
-        console.log(post.comments.length);
-
         res.render('posts/show', { post: post });
     });
 });
@@ -87,19 +84,19 @@ router.post('/', function(req, res) {
 
 // Comment 
 router.post('/comment/:id', function(req, res) {
-console.log("req log:" + req.body.com_name );
+    console.log("req log:" + req.body.com_name);
 
     Post.findOne({ _id: req.params.id }, function(err, post) {
-        if (err) throw err;        
+        if (err) throw err;
 
         post.comments.push({
             writer: req.body.com_name,
             email: req.body.com_email,
-            memo: req.body.com_memo            
+            memo: req.body.com_memo
         });
 
-        post.save(function(err){
-            if(err) throw err;
+        post.save(function(err) {
+            if (err) throw err;
             res.redirect('/posts/' + req.params.id);
         });
     });
