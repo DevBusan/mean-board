@@ -61,7 +61,7 @@
                     </div>
                     <div class="col-md-12 form-group">
                         <label class="sr-only" for="com_memo">Comment</label>
-                        <textarea class="form-control" id="com_memo" name="com_memo" placeholder="Comment"></textarea>
+                        <textarea class="form-control" id="com_memo" name="com_memo" placeholder="Comment" rows="5" wrap="hard" ></textarea>
                     </div>
                     <div class="col-md-12 form-group text-right">
                         <button type="submit" class="btn btn-primary">저장</button>
@@ -90,18 +90,20 @@
                     <div class="col-sm-5">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <strong><%= post.comments[i].writer %></strong><span class="text-muted"><%= post.comments[i].writeDate %></span>
+                                <strong><%= post.comments[i].writer %></strong> &nbsp; 
+                                <span class="text-muted"><%= dateFormat(post.comments[i].writeDate) %></span>
+                                <a href="mailto:<%= post.comments[i].email %>">
+                                    <span class="glyphicon glyphicon-envelope"></span>
+                                </a>
                             </div>
                             <div class="panel-body">
-                                <%= post.comments[i].memo %>
+                                <%= replaceNewLine(post.comments[i].memo) %>
                             </div>
                         </div>
                     </div>
                 </div>                
                 <% } %>              
-
-            </div><!-- /container -->
-            <p></p>
+            </div>            
         </div>
 </body>
 

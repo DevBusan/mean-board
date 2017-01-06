@@ -84,12 +84,10 @@ router.post('/', function(req, res) {
 
 // Comment 
 router.post('/comment/:id', function(req, res) {
-    console.log("req log:" + req.body.com_name);
-
     Post.findOne({ _id: req.params.id }, function(err, post) {
         if (err) throw err;
 
-        post.comments.push({
+        post.comments.unshift({
             writer: req.body.com_name,
             email: req.body.com_email,
             memo: req.body.com_memo
