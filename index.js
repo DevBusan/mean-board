@@ -41,10 +41,6 @@ app.use(express.static(__dirname + '/public'));
 app.locals.dateFormat = function(date) { 
     return moment(date).format('YYYY-MM-DD HH:mm:ss');;
 };
-app.locals.replaceNewLine = function(str) {    
-    return str.replace(/\n\r/g, "<br>");
-};
-
 
 var port = process.env.PORT || 3000;
 app.listen(port, function() {
