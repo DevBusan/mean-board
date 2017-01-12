@@ -91,7 +91,7 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <strong><%= post.comments[i].writer %></strong> &nbsp; 
-                                <span class="text-muted"><%= dateFormat(post.comments[i].writeDate) %></span>
+                                <span class="text-muted"><%= dateFormat(post.comments[i].writeDate,"YYYY-MM-DD HH:mm:ss") %></span>
                                 <a href="mailto:<%= post.comments[i].email %>">
                                     <span class="glyphicon glyphicon-envelope"></span>
                                 </a>

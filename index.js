@@ -38,8 +38,8 @@ app.use('/tasks', require('./routes/tasks'));
 app.use(express.static(__dirname + '/public'));
 
 //common utils(need common file)
-app.locals.dateFormat = function(date) { 
-    return moment(date).format('YYYY-MM-DD HH:mm:ss');;
+app.locals.dateFormat = function(date,format) { 
+    return moment(date).format(format);;
 };
 
 var port = process.env.PORT || 3000;
