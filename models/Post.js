@@ -6,7 +6,13 @@ var postSchema = mongoose.Schema({
     title: { type: String, required: true },
     body: { type: String },
     createdAt: { type: Date, default: Date.now },
-    updatedAt: { type: Date }
+    updatedAt: { type: Date },
+    comments: [{
+        writer: { type: String },
+        memo: { type: String },
+        email: { type: String },
+        writeDate: { type: Date, default: Date.now }
+    }]
 });
 
 postSchema.virtual('createdDate').get(function() {

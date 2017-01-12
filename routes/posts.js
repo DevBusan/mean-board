@@ -51,54 +51,72 @@ router.get('/', function(req, res) {
 
 // New
 router.get('/new', function(req, res) {
-	res.render('posts/new');
+    res.render('posts/new');
 });
 
 // Show
 router.get('/:id', function(req, res) {
-	Post.findOne({_id: req.params.id}, function(err, post) {
-		if (err) res.json(err);
-		res.render('posts/show', {post: post});
-	});
+    Post.findOne({ _id: req.params.id }, function(err, post) {
+        if (err) res.json(err);
+        res.render('posts/show', { post: post });
+    });
 });
 
 // Edit
 router.get('/:id/edit', function(req, res) {
-	Post.findOne({_id: req.params.id}, function(err, post) {
-		if (err) res.json(err);
-		res.render('posts/edit', {post: post});
-	});
+    Post.findOne({ _id: req.params.id }, function(err, post) {
+        if (err) res.json(err);
+        res.render('posts/edit', { post: post });
+    });
 });
 
 // Create
 router.post('/', function(req, res) {
 
-	//for (var i = 0; i < 1000; i++) {
-	//	req.body.title = "게시판 테스트 데이터 : " + i;
-	//	Post.create(req.body);
-	//}
+    //for (var i = 0; i < 1000; i++) {
+    //	req.body.title = "게시판 테스트 데이터 : " + i;
+    //	Post.create(req.body);
+    //}
 
-	Post.create(req.body, function(err, post) {
-		if (err) res.json(err);
-		res.redirect('/posts');
-	});
+    Post.create(req.body, function(err, post) {
+        if (err) res.json(err);
+        res.redirect('/posts');
+    });
+});
+
+// Comment 
+router.post('/comment/:id', function(req, res) {
+    Post.findOne({ _id: req.params.id }, function(err, post) {
+        if (err) throw err;
+
+        post.comments.unshift({
+            writer: req.body.com_name,
+            email: req.body.com_email,
+            memo: req.body.com_memo
+        });
+
+        post.save(function(err) {
+            if (err) throw err;
+            res.redirect('/posts/' + req.params.id);
+        });
+    });
 });
 
 // Update
 router.put('/:id', function(req, res) {
-	req.body.updatedAt = Date.now();
-	Post.findOneAndUpdate({_id: req.params.id}, req.body, function(err, post) {
-		if (err) res.json(err);
-		res.redirect('/posts/' + req.params.id);
-	});
+    req.body.updatedAt = Date.now();
+    Post.findOneAndUpdate({ _id: req.params.id }, req.body, function(err, post) {
+        if (err) res.json(err);
+        res.redirect('/posts/' + req.params.id);
+    });
 });
 
 // Destory
 router.delete('/:id', function(req, res) {
-	Post.remove({_id: req.params.id}, function(err, post) {
-		if (err) res.json(err);
-		res.redirect('/posts');
-	});
+    Post.remove({ _id: req.params.id }, function(err, post) {
+        if (err) res.json(err);
+        res.redirect('/posts');
+    });
 });
 
 module.exports = router;
