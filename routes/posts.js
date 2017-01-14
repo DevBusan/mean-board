@@ -8,7 +8,7 @@ var router = express.Router();
 // Index
 router.get('/', function(req, res) {
 	//현재 페이지	
-	var curPage = req.params['curPage'];
+    var curPage = req.param("curPage");
 	if (curPage == null) {
 		curPage = 1;
 	}
