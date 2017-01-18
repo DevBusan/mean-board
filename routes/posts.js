@@ -82,7 +82,7 @@ router.post('/', function(req, res) {
     });
 });
 
-// Comment 
+//Comment - Create
 router.post('/comment/:id', function(req, res) {
     Post.findOne({ _id: req.params.id }, function(err, post) {
         if (err) throw err;
