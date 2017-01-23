@@ -47,9 +47,49 @@
                 </div>
             </div>
             <p></p>
+            <br>
 
-            <div class="well">
-                <h4>댓글작성</h4>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6">
+                    <% if( post.comments.length != 0) { %>                                            
+                        <h4 style="border-bottom:1px solid #696969" >Comments(<%=post.comments.length %>)</h4>
+                    <% } %>                    
+                    </div>                    
+                </div>                
+                <% for (var i = 0; i < post.comments.length; i++) { %>
+                <div class="row">
+                    <!--<div class="col-sm-1">
+                        <div class="thumbnail" style="text-align: center">
+                            <img class="img-responsive user-photo" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png">
+                            <span class="glyphicon glyphicon-user" style="font-size:30px"></span>
+                        </div>
+                    </div>-->
+                    <div class="col-sm-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <input type="hidden" name="com_id" value="<%= post.comments[i]._id %>">
+                                <strong><%= post.comments[i].writer %></strong> &nbsp; 
+                                <span class="text-muted"><%= dateFormat(post.comments[i].writeDate,"YYYY-MM-DD HH:mm:ss") %></span>
+                                <a href="mailto:<%= post.comments[i].email %>">
+                                    <span class="glyphicon glyphicon-envelope"></span>                                    
+                                </a>
+                                <a href="#">
+                                <span class="glyphicon glyphicon-delete"></span>                                
+                                </a>
+                            </div>
+                            <div>
+                                <pre style="border: 0; background-color: transparent"><%= post.comments[i].memo %></pre>                                                                                        
+                            </div>
+                        </div>
+                    </div>
+                </div>                
+                <% } %>                                    
+            </div>       
+
+            <p></p>
+
+             <div class="well">                
                 <form id="commentForm" action="/posts/comment/<%= post._id%>" method="POST" role="form" class="clearfix">
                     <div class="col-md-6 form-group">
                         <label class="sr-only" for="com_name">Name</label>
@@ -64,46 +104,11 @@
                         <textarea class="form-control" id="com_memo" name="com_memo" placeholder="Comment" rows="5" wrap="hard" ></textarea>
                     </div>
                     <div class="col-md-12 form-group text-right">
-                        <button type="submit" class="btn btn-primary">저장</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
                     </div>
                 </form>
-            </div>
-            <p></p>
+            </div>        
 
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-12">
-                    <% if( post.comments.length != 0) { %>                                            
-                        <h3>댓글</h3>
-                    <% } %>                    
-                    </div>
-                </div>
-                
-                <% for (var i = 0; i < post.comments.length; i++) { %>
-                <div class="row">
-                    <div class="col-sm-1">
-                        <div class="thumbnail" style="text-align: center">
-                            <!--<img class="img-responsive user-photo" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png">-->
-                            <span class="glyphicon glyphicon-user" style="font-size:30px"></span>
-                        </div>
-                    </div>
-                    <div class="col-sm-5">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <strong><%= post.comments[i].writer %></strong> &nbsp; 
-                                <span class="text-muted"><%= dateFormat(post.comments[i].writeDate,"YYYY-MM-DD HH:mm:ss") %></span>
-                                <a href="mailto:<%= post.comments[i].email %>">
-                                    <span class="glyphicon glyphicon-envelope"></span>
-                                </a>
-                            </div>
-                            <div>
-                                <pre style="border: 0; background-color: transparent"><%= post.comments[i].memo %></pre>                                                                                        
-                            </div>
-                        </div>
-                    </div>
-                </div>                
-                <% } %>              
-            </div>            
         </div>
 </body>
 

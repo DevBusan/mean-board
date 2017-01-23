@@ -100,6 +100,25 @@ router.post('/comment/:id', function(req, res) {
     });
 });
 
+//Comment - Update
+router.post('/comment/:id', function(req, res) {
+    Post.findOne({ _id: req.params.id }, function(err, post) {
+        if (err) throw err;
+
+        post.comments.unshift({
+            writer: req.body.com_name,
+            email: req.body.com_email,
+            memo: req.body.com_memo
+        });
+
+        post.save(function(err) {
+            if (err) throw err;
+            res.redirect('/posts/' + req.params.id);
+        });
+    });
+});
+
+
 // Update
 router.put('/:id', function(req, res) {
     req.body.updatedAt = Date.now();
