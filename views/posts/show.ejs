@@ -72,11 +72,14 @@
                                 <strong><%= post.comments[i].writer %></strong> &nbsp; 
                                 <span class="text-muted"><%= dateFormat(post.comments[i].writeDate,"YYYY-MM-DD HH:mm:ss") %></span>
                                 <a href="mailto:<%= post.comments[i].email %>">
-                                    <span class="glyphicon glyphicon-envelope"></span>                                    
+                                    <span class="glyphicon glyphicon-envelope"></span>
+                                </a>                                
+                                <a href="#" style="text-align:right">
+                                    <span class="glyphicon glyphicon-edit"></span>
                                 </a>
-                                <a href="#">
-                                <span class="glyphicon glyphicon-delete"></span>                                
-                                </a>
+                                <a href="#" style="text-align:right">        
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </a>                              
                             </div>
                             <div>
                                 <pre style="border: 0; background-color: transparent"><%= post.comments[i].memo %></pre>                                                                                        
