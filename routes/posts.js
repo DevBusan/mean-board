@@ -84,7 +84,25 @@ router.post('/', function(req, res) {
     });
 });
 
-// Comment 
+// Update
+router.put('/:id', function(req, res) {
+    req.body.updatedAt = Date.now();
+    Post.findOneAndUpdate({ _id: req.params.id }, req.body, function(err, post) {
+        if (err) res.json(err);
+        res.redirect('/posts/' + req.params.id);
+    });
+});
+
+// Destory
+router.delete('/:id', function(req, res) {
+    Post.remove({ _id: req.params.id }, function(err, post) {
+        if (err) res.json(err);
+        res.redirect('/posts');
+    });
+});
+
+
+//Comment - Create
 router.post('/comment/:id', function(req, res) {
     Post.findOne({ _id: req.params.id }, function(err, post) {
         if (err) throw err;
@@ -102,21 +120,38 @@ router.post('/comment/:id', function(req, res) {
     });
 });
 
-// Update
-router.put('/:id', function(req, res) {
-    req.body.updatedAt = Date.now();
-    Post.findOneAndUpdate({ _id: req.params.id }, req.body, function(err, post) {
-        if (err) res.json(err);
-        res.redirect('/posts/' + req.params.id);
+//Comment - Update
+router.put('/comment/:id/:com_id', function(req, res) {
+    Post.findOne({ _id: req.params.id }, function(err, post) {
+        if (err) throw err;
+
+        var item = post.comments.pull({_id : req.param.com_id});
+
+        item.writer = req.body.com_name;
+        item.email = req.body.com_email;
+        item.memo = req.body.com_memo;
+    
+        post.save(function(err) {
+            if (err) throw err;
+            res.redirect('/posts/' + req.params.id);
+        });
     });
 });
 
-// Destory
-router.delete('/:id', function(req, res) {
-    Post.remove({ _id: req.params.id }, function(err, post) {
-        if (err) res.json(err);
-        res.redirect('/posts');
+//Comment - Delete
+router.delete('/comment/:id/:com_id', function(req, res) {
+     Post.findOne({ _id: req.params.id }, function(err, post) {
+        if (err) throw err;
+
+        post.comments.pull({_id : req.param.com_id});
+
+        post.save(function(err) {
+            if (err) throw err;
+            res.redirect('/posts/' + req.params.id);
+        });
     });
 });
+
+
 
 module.exports = router;
