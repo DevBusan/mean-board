@@ -7,44 +7,46 @@ var router = express.Router();
 
 // Index
 router.get('/', function(req, res) {
-    //현재 페이지
-    var curPage = req.param('curPage');
-    if (curPage == null) {
-        curPage = 1;
-    }
+	//현재 페이지	
+    var curPage = req.param("curPage");
+	if (curPage == null) {
+		curPage = 1;
+	}
 
-    Post.count({}, function(err, totalCount) {
-        if (err) return res.json(err);
+	Post.count({}, function(err, totalCount){
+		if(err) return res.json(err);
 
-        //페이지당 출력 데이터 수
-        var sizePerPage = 10;
-        var skipSize = (curPage - 1) * sizePerPage;
-        var maxPage = Math.ceil(totalCount / sizePerPage);
+		//페이지당 출력 데이터 수
+		var sizePerPage = 10;
+		var skipSize = (curPage-1) * sizePerPage;
+		var maxPage = Math.ceil(totalCount/sizePerPage);
 
-        //한번에 출력할 페이지들
-        var pagePerGroup = 10;
-        var curGroup = Math.ceil(curPage / pagePerGroup);
-        var startPage = (curGroup - 1) * pagePerGroup + 1;
-        var endPage = (curGroup * pagePerGroup) > maxPage ? maxPage : (curGroup * pagePerGroup);
+		//한번에 출력할 페이지들
+		var pagePerGroup = 10;
+		var curGroup = Math.ceil(curPage/pagePerGroup);
+		var startPage = (curGroup - 1) * pagePerGroup + 1 ;
+		var endPage = (curGroup * pagePerGroup) > maxPage ? maxPage : (curGroup * pagePerGroup) ;
 
-        Post.find({}).sort({ createdAt: -1 }).skip(skipSize).limit(sizePerPage).exec(
-            function(err, posts) {
-                if (err) return res.json(err);
+		Post.find({}).sort({createdAt:-1}).skip(skipSize).limit(sizePerPage).exec(
+			function(err,posts){
+				if(err) return res.json(err);
+ 			 
+				res.render('posts/index',
+					{
+						posts: posts,
+						maxPage : maxPage,
+						curPage : curPage,
+						startPage : startPage,
+						endPage : endPage
+					}
+				);
+			});
 
-                res.render('posts/index', {
-                    posts: posts,
-                    maxPage: maxPage,
-                    curPage: curPage,
-                    startPage: startPage,
-                    endPage: endPage
-                });
-            });
-
-        // Post.find({}, function(err, posts) {
-        // 	if (err) res.json(err);
-        // 	res.render('posts/index', {posts: posts});
-        // });
-    });
+		// Post.find({}, function(err, posts) {
+		// 	if (err) res.json(err);
+		// 	res.render('posts/index', {posts: posts});
+		// });
+	});
 });
 
 // New
@@ -82,7 +84,25 @@ router.post('/', function(req, res) {
     });
 });
 
-// Comment 
+// Update
+router.put('/:id', function(req, res) {
+    req.body.updatedAt = Date.now();
+    Post.findOneAndUpdate({ _id: req.params.id }, req.body, function(err, post) {
+        if (err) res.json(err);
+        res.redirect('/posts/' + req.params.id);
+    });
+});
+
+// Destory
+router.delete('/:id', function(req, res) {
+    Post.remove({ _id: req.params.id }, function(err, post) {
+        if (err) res.json(err);
+        res.redirect('/posts');
+    });
+});
+
+
+//Comment - Create
 router.post('/comment/:id', function(req, res) {
     Post.findOne({ _id: req.params.id }, function(err, post) {
         if (err) throw err;
@@ -100,21 +120,38 @@ router.post('/comment/:id', function(req, res) {
     });
 });
 
-// Update
-router.put('/:id', function(req, res) {
-    req.body.updatedAt = Date.now();
-    Post.findOneAndUpdate({ _id: req.params.id }, req.body, function(err, post) {
-        if (err) res.json(err);
-        res.redirect('/posts/' + req.params.id);
+//Comment - Update
+router.put('/comment/:id/:com_id', function(req, res) {
+    Post.findOne({ _id: req.params.id }, function(err, post) {
+        if (err) throw err;
+
+        var item = post.comments.pull({_id : req.param.com_id});
+
+        item.writer = req.body.com_name;
+        item.email = req.body.com_email;
+        item.memo = req.body.com_memo;
+    
+        post.save(function(err) {
+            if (err) throw err;
+            res.redirect('/posts/' + req.params.id);
+        });
     });
 });
 
-// Destory
-router.delete('/:id', function(req, res) {
-    Post.remove({ _id: req.params.id }, function(err, post) {
-        if (err) res.json(err);
-        res.redirect('/posts');
+//Comment - Delete
+router.delete('/comment/:id/:com_id', function(req, res) {
+     Post.findOne({ _id: req.params.id }, function(err, post) {
+        if (err) throw err;
+
+        post.comments.pull({_id : req.param.com_id});
+
+        post.save(function(err) {
+            if (err) throw err;
+            res.redirect('/posts/' + req.params.id);
+        });
     });
 });
+
+
 
 module.exports = router;
