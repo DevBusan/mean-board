@@ -93,7 +93,7 @@ router.put('/:id', function(req, res) {
     });
 });
 
-// Destory
+// Delete
 router.delete('/:id', function(req, res) {
     Post.remove({ _id: req.params.id }, function(err, post) {
         if (err) res.json(err);
@@ -139,19 +139,22 @@ router.put('/comment/:id/:com_id', function(req, res) {
 });
 
 //Comment - Delete
-router.delete('/comment/:id/:com_id', function(req, res) {
-     Post.findOne({ _id: req.params.id }, function(err, post) {
-        if (err) throw err;
-
-        post.comments.pull({_id : req.param.com_id});
-
-        post.save(function(err) {
-            if (err) throw err;
-            res.redirect('/posts/' + req.params.id);
+router.delete('/:id/comment/:com_id', function(req, res) {    
+    /*Post.update(
+        { _id: req.params.id },           
+        { $pull : { 'comments' : { _id : req.params.com_id }  } },
+        function(err, post) {            
+            if (err) throw err;             
+            res.redirect('/posts/' + req.params.id);        
+        });*/
+    Post.findOne({ _id: req.params.id }, function(err, post) {     
+        post.comments.id(req.params.com_id).remove();
+        post.save(function(err){
+            if (err) throw err;      
+            res.redirect('/posts/' + req.params.id);        
         });
     });
 });
-
 
 
 module.exports = router;
