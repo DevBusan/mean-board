@@ -121,15 +121,15 @@ router.post('/comment/:id', function(req, res) {
 });
 
 //Comment - Update
-router.put('/comment/:id/:com_id', function(req, res) {
+router.put(':id/comment/:com_id', function(req, res) {
     Post.findOne({ _id: req.params.id }, function(err, post) {
         if (err) throw err;
 
-        var item = post.comments.pull({_id : req.param.com_id});
-
-        item.writer = req.body.com_name;
-        item.email = req.body.com_email;
-        item.memo = req.body.com_memo;
+        var comment = post.comments.id(req.param.com_id);
+                
+        comment.writer = req.body.com_name;
+        comment.email = req.body.com_email;
+        commnet.memo = req.body.com_memo;
     
         post.save(function(err) {
             if (err) throw err;
