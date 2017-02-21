@@ -5,17 +5,45 @@
 <head>
     <meta charset="UTF-8">
     <% include ../partials/head %>
-    <script>
+    <script>      
 
-        function com_Edit(eventEl) {
-           eventEl.parentElement.parentElement.parentElement.nextElementSibling.style.display = "block";
-           eventEl.parentElement.parentElement.parentElement.style.display = "none";                    
-           
+        function com_Edit(eventEl) { 
+           var sElement = eventEl.parentElement.parentElement.nextElementSibling.nextElementSibling.children[0];
+           var tElement = eventEl.parentElement.parentElement.nextElementSibling.nextElementSibling.children[1];
+
+           tElement.children[0].value = sElement.innerText;      
+           sElement.style.display = "none";
+           tElement.style.display = "block";           
+
+           eventEl.parentElement.parentElement.nextElementSibling.style.display = "block";
+           eventEl.parentElement.parentElement.style.display = "none";           
+                 
         }
 
         function com_Cancel(eventEl) {
-           eventEl.parentElement.parentElement.parentElement.nextElementSibling.style.display = "none";
-           eventEl.parentElement.parentElement.parentElement.style.display = "block";
+           var sElement = eventEl.parentElement.nextElementSibling.children[0];
+           var tElement = eventEl.parentElement.nextElementSibling.children[1];
+
+           sElement.style.display = "block";
+           tElement.style.display = "none"; 
+
+           eventEl.parentElement.style.display = "none";
+           eventEl.parentElement.previousElementSibling.style.display = "block";           
+
+        }
+
+        function com_Update(eventEl){
+            var formElement = eventEl.parentElement.nextElementSibling.children[1];
+
+            formElement.children[0].value = formElement.children[0].value.trim();
+
+            if ( formElement.children[0].value == '') {
+                alert("내용을 입력해주세요.");
+                return;
+            } else {
+                formElement.submit();
+            }
+            
         }
 
     </script>
@@ -73,8 +101,7 @@
                             <span class="glyphicon glyphicon-user" style="font-size:30px"></span>
                         </div>
                     </div>-->
-                            <div class="col-sm-6">
-                                <!--조회모드-->
+                            <div class="col-sm-6">                                
                                 <div class="panel panel-default">
                                     <div class="panel-heading col-sm-6">
                                         <input type="hidden" name="com_id" value="<%= post.comments[i]._id %>">
@@ -84,48 +111,37 @@
                                             <span class="glyphicon glyphicon-envelope"></span>
                                         </a>
                                     </div>
+                                    <!--조회모드-->
                                     <div class="panel-heading col-sm-6 text-right">    
                                         <form action="/posts/<%= post.id %>/comment/<%= post.comments[i]._id %>?_method=delete" method="post">                                    
-                                            <a href="#" onclick="com_Edit(this)">
+                                            <a onclick="com_Edit(this)">
                                                 <!--<span class="glyphicon glyphicon-edit"></span>--><small>Edit</small>
                                             </a>                                                         
-                                            <a href="#">|</a>                                            
+                                            <a>|</a>                                            
                                             <a href="#" onclick="confirm('Do you want to delete this comment?')?this.parentElement.submit():null;">
                                                 <!--<span class="glyphicon glyphicon-remove"></span>--><small>Delete</small>                                                
                                             </a>
                                         </form>
-                                    </div>                                    
-                                    <div>
-                                        <pre id="com_memo_print" style="border: 0; background-color: transparent"><%= post.comments[i].memo %></pre>                                        
-                                    </div>
-                                </div>
-
-                                <!--편집모드-->
-                                <div class="panel panel-default" style="display: none">
-                                    <div class="panel-heading col-sm-6">
-                                        <input type="hidden" name="com_id" value="<%= post.comments[i]._id %>">
-                                        <strong><%= post.comments[i].writer %></strong> &nbsp;
-                                        <span class="text-muted"><%= dateFormat(post.comments[i].writeDate,"YYYY-MM-DD HH:mm:ss") %></span>
-                                        <a href="mailto:<%= post.comments[i].email %>">
-                                            <span class="glyphicon glyphicon-envelope"></span>
-                                        </a>
-                                    </div>                                    
-                                    <div class="panel-heading col-sm-6 text-right">
-                                        <a href="#">
+                                    </div>     
+                                    <!--편집모드-->
+                                    <div class="panel-heading col-sm-6 text-right" style="display: none">
+                                        <a onclick="com_Update(this)">
                                             <!--<span class="glyphicon glyphicon-save"></span>--><small>Save</small>
                                         </a>
-                                        <a href="#">|</a>
-                                        <a href="#" onclick="com_Cancel(this)">
-                                            <small>Cancel</small>                                            
+                                        <a>|</a>
+                                        <a onclick="com_Cancel(this)">
+                                            <small>Cancel</small>
                                         </a>
                                     </div>
-                                    <div>                                        
-                                        <form id="com_EditForm" action="/posts/<%= post.id %>/comment/<%= post.comments[i]._id %>?_method=put" method="POST"
-                                            role="form">
-                                            <textarea class="form-control" id="com_memo_update" name="com_memo_update" placeholder="Comment" wrap="hard" required><%= post.comments[i].memo %></textarea>
+                                    <div>
+                                        <pre id="com_memo_print" style="border: 0; background-color: transparent"><%= post.comments[i].memo %></pre>                                        
+                                        <form action="/posts/<%= post.id %>/comment/<%= post.comments[i]._id %>?_method=put" method="POST"
+                                            role="form" style="display: none">
+                                            <textarea class="form-control" id="com_memo_update" name="com_memo_update" wrap="hard" required>                                                
+                                            </textarea>
                                         </form>
                                     </div>
-                                </div>
+                                </div>                                
                             </div>
                         </div>
                         <% } %>
