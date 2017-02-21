@@ -19,7 +19,7 @@ router.get('/', function(req, res) {
 		//페이지당 출력 데이터 수
 		var sizePerPage = 10;
 		var skipSize = (curPage-1) * sizePerPage;
-		var maxPage = Math.ceil(totalCount/sizePerPage);
+		var maxPage = Math.ceil(totalCount/sizePerPage);        
 
 		//한번에 출력할 페이지들
 		var pagePerGroup = 10;
@@ -27,17 +27,20 @@ router.get('/', function(req, res) {
 		var startPage = (curGroup - 1) * pagePerGroup + 1 ;
 		var endPage = (curGroup * pagePerGroup) > maxPage ? maxPage : (curGroup * pagePerGroup) ;
 
+        var startIndex = totalCount - ((curPage - 1) * sizePerPage)
+
 		Post.find({}).sort({createdAt:-1}).skip(skipSize).limit(sizePerPage).exec(
 			function(err,posts){
 				if(err) return res.json(err);
  			 
 				res.render('posts/index',
-					{
-						posts: posts,
+					{                                                
+						posts : posts,
 						maxPage : maxPage,
 						curPage : curPage,
 						startPage : startPage,
-						endPage : endPage
+						endPage : endPage,
+                        startIndex : startIndex
 					}
 				);
 			});
@@ -58,7 +61,13 @@ router.get('/new', function(req, res) {
 router.get('/:id', function(req, res) {
     Post.findOne({ _id: req.params.id }, function(err, post) {
         if (err) res.json(err);
-        res.render('posts/show', { post: post });
+
+        post.count = post.count + 1;
+        post.save(function(err){
+            if(err) res.json(err);
+
+            res.render('posts/show', { post: post });
+        });
     });
 });
 
@@ -73,10 +82,10 @@ router.get('/:id/edit', function(req, res) {
 // Create
 router.post('/', function(req, res) {
 
-    //for (var i = 0; i < 1000; i++) {
-    //	req.body.title = "게시판 테스트 데이터 : " + i;
-    //	Post.create(req.body);
-    //}
+   //for (var i = 0; i < 1000; i++) {
+   // 	req.body.title = "게시판 테스트 데이터 : " + i;
+   // 	Post.create(req.body);
+   //}
 
     Post.create(req.body, function(err, post) {
         if (err) res.json(err);

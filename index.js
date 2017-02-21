@@ -39,7 +39,7 @@ app.use(express.static(__dirname + '/public'));
 
 //common utils(need common file)
 app.locals.dateFormat = function(date,format) { 
-    return moment(date).format(format);;
+    return moment(date).format(format);
 };
 
 var port = process.env.PORT || 3000;

@@ -17,7 +17,8 @@
 				<tr>
 					<th width="100px">No.</th>
 					<th>Title</th>
-					<th width="100px">Created</th>
+					<th width="150px">Created</th>
+					<th width="100px">Count</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -28,9 +29,10 @@
 				<% } %>
 				<% posts.forEach(function(post, index) { %>
 				<tr>
-					<td><%= index+1 %></td>
+					<td><%= startIndex - index %></td>
 					<td><a href="/posts/<%= post._id %>"><%= post.title %></a></td>
 					<td><%= post.createdDate %></td>
+					<td><%= post.count %></td>
 				<% }) %>
 				</tr>
 			</tbody>
