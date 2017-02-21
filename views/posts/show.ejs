@@ -38,7 +38,7 @@
             formElement.children[0].value = formElement.children[0].value.trim();
 
             if ( formElement.children[0].value == '') {
-                alert("내용을 입력해주세요.");
+                alert("Please input comment.");
                 return;
             } else {
                 formElement.submit();
@@ -86,7 +86,7 @@
                 <br>
                 <div class="container">
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-12">
                             <% if( post.comments.length != 0) { %>
                                 <h4 style="border-bottom:1px solid #696969">Comments(
                                     <%=post.comments.length %>)</h4>
@@ -101,7 +101,7 @@
                             <span class="glyphicon glyphicon-user" style="font-size:30px"></span>
                         </div>
                     </div>-->
-                            <div class="col-sm-6">                                
+                            <div class="col-sm-12">                                
                                 <div class="panel panel-default">
                                     <div class="panel-heading col-sm-6">
                                         <input type="hidden" name="com_id" value="<%= post.comments[i]._id %>">
@@ -145,27 +145,27 @@
                             </div>
                         </div>
                         <% } %>
-                </div>
-                <p></p>
-                <div class="well">
-                    <form id="commentForm" action="/posts/comment/<%= post._id%>" method="POST" role="form" class="clearfix">
-                        <div class="col-sm-6 form-group">
-                            <label class="sr-only" for="com_name">Name</label>
-                            <input type="text" class="form-control" id="com_name" name="com_name" placeholder="Name" required>
-                        </div>
-                        <div class="col-sm-6 form-group">
-                            <label class="sr-only" for="com_email">Email</label>
-                            <input type="email" class="form-control" id="com_email" name="com_email" placeholder="Email">
-                        </div>
-                        <div class="col-sm-12 form-group">
-                            <label class="sr-only" for="com_memo">Comment</label>
-                            <textarea class="form-control" id="com_memo" name="com_memo" placeholder="Comment" rows="5" wrap="hard" required></textarea>
-                        </div>
-                        <div class="col-sm-12 form-group text-right">
-                            <button type="submit" class="btn btn-primary">Save</button>
-                        </div>
-                    </form>
-                </div>
+
+                        <div class="well">                    
+                        <form id="commentForm" action="/posts/comment/<%= post._id%>" method="POST" role="form" class="clearfix">
+                            <div class="col-sm-6 form-group">
+                                <label class="sr-only" for="com_name">Name</label>
+                                <input type="text" class="form-control" id="com_name" name="com_name" placeholder="Name" required>
+                            </div>
+                            <div class="col-sm-6 form-group">
+                                <label class="sr-only" for="com_email">Email</label>
+                                <input type="email" class="form-control" id="com_email" name="com_email" placeholder="Email">
+                            </div>
+                            <div class="col-sm-12 form-group">
+                                <label class="sr-only" for="com_memo">Comment</label>
+                                <textarea class="form-control" id="com_memo" name="com_memo" placeholder="Comment" rows="5" wrap="hard" required></textarea>
+                            </div>
+                            <div class="col-sm-12 form-group text-right">
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>                
         </div>        
 </body>
 

@@ -12,7 +12,8 @@ var postSchema = mongoose.Schema({
         memo: { type: String },
         email: { type: String },
         writeDate: { type: Date, default: Date.now }
-    }]
+    }],
+    count:{type:Number, default: 0}
 });
 
 postSchema.virtual('createdDate').get(function() {
