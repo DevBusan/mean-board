@@ -13,7 +13,8 @@ var postSchema = mongoose.Schema({
         email: { type: String },
         writeDate: { type: Date, default: Date.now }
     }],
-    count:{type:Number, default: 0}
+    count:{ type:Number, default: 0 },
+    like :{ type:Number, default: 0 }
 });
 
 postSchema.virtual('createdDate').get(function() {

@@ -74,7 +74,14 @@
                     <%= post.body %>
                 </div>
                 <div>
-                    <a href="/posts" class="btn btn-default">Back</a>
+                    <div class="pull-left">
+                        <a href="/posts" class="btn btn-default text-center">Back</a>                    
+                    </div>
+                    <div class="text-center" style="width:100px">
+                        <a href="#" class="btn btn-defalut">
+                            <span class="glyphicon glyphicon-thumbs-up"></span>
+                        </a> 
+                    </div>                   
                     <div class="pull-right">
                         <a href="/posts/<%= post._id %>/edit" class="btn btn-default">Edit</a>
                         <form action="/posts/<%= post.id %>?_method=delete" method="post" class="post-delete">

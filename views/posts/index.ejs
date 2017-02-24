@@ -19,6 +19,7 @@
 					<th>Title</th>
 					<th width="150px">Created</th>
 					<th width="100px">Count</th>
+					<th width="100px">Like</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -33,6 +34,7 @@
 					<td><a href="/posts/<%= post._id %>"><%= post.title %></a></td>
 					<td><%= post.createdDate %></td>
 					<td><%= post.count %></td>
+					<td><%= post.like %></td>
 				<% }) %>
 				</tr>
 			</tbody>
