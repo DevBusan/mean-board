@@ -83,9 +83,11 @@
                         </form>
                     </div>
                     <div class="text-center">
-                        <a href="#" class="btn btn-default">
+                        <form action="/posts/<%= post.id %>/like?_method=put" method="post">
+                        <a href="#" class="btn btn-default" onclick="this.parentElement.submit()">
                             <span class="glyphicon glyphicon-thumbs-up"></span> Like (<%= post.like %>)
                         </a>
+                        </form>
                     </div>
                 </div>
                 <p></p>
