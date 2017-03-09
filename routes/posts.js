@@ -113,18 +113,18 @@ router.put('/:id', function (req, res) {
 });
 
 // Update Like
-router.put('/:id/like', function (req, res) {    
+router.put('/:id/like', function (req, res) {
     Post.findOne({
         _id: req.params.id
     }, function (err, post) {
-       if (err) res.json(err);
+        if (err) res.json(err);
 
-       post.like = post.like + 1;
+        post.like = post.like + 1;
 
-       post.save(function(err){
-           if (err) res.json(err);
-           res.redirect('/posts/' + req.params.id);
-       });              
+        post.save(function (err) {
+            if (err) res.json(err);
+            res.redirect('/posts/' + req.params.id);
+        });
     });
 });
 
