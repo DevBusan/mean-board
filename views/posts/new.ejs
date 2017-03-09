@@ -5,6 +5,7 @@
 <head>
 	<meta charset="UTF-8">
 	<% include ../partials/head %>
+	<script src="https://cdn.ckeditor.com/4.6.2/standard/ckeditor.js"></script>
 </head>
 <body>
 	<% include ../partials/nav %>
@@ -18,13 +19,16 @@
 			<div class="form-group">
 				<label class="col-sm-2" for="title">Title</label>
 				<div class="col-sm-10">
-				<input class="form-control" type="text" name="title" id="title" placeholder="Title">
+				<input class="form-control" type="text" name="title" id="title" placeholder="Title" required>
 				</div>
-			</div>
+			</div>			
 			<div class="form-group">
 				<label class="col-sm-2" for="body">Body</label>
 				<div class="col-sm-10">
 				<textarea class="form-control body" rows="6" name="body" id="body" placeholder="Contents"></textarea>
+				<script>
+						CKEDITOR.replace('body');
+				</script>
 				</div>
 			</div>
 
