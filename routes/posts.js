@@ -17,7 +17,7 @@ router.get('/', function (req, res) {
         if (err) return res.json(err);
 
         //페이지당 출력 데이터 수
-        var sizePerPage = 10;
+        var sizePerPage = 15;
         var skipSize = (curPage - 1) * sizePerPage;
         var maxPage = Math.ceil(totalCount / sizePerPage);
 
