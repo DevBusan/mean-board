@@ -31,7 +31,7 @@
 				<% posts.forEach(function(post, index) { %>
 				<tr>
 					<td><%= startIndex - index %></td>
-					<td><a href="/posts/<%= post._id %>"><%= post.title %></a></td>
+					<td><a href="/posts/<%= post._id %>"><%= post.title %> <font color="orangered">[<%= post.comments.length %>]</font> </a></td>
 					<td><%= post.createdDate %></td>
 					<td><%= post.count %></td>
 					<td><%= post.like %></td>
