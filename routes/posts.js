@@ -2,13 +2,14 @@
 
 var express = require('express');
 var Post = require('../models/Post');
+var multer = require('multer');
 
 var router = express.Router();
 
 // Index
 router.get('/', function (req, res) {
     //현재 페이지	
-    var curPage = req.param("curPage");
+    var curPage = req.params.curPage;
     if (curPage == null) {
         curPage = 1;
     }
