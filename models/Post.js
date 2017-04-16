@@ -14,7 +14,8 @@ var postSchema = mongoose.Schema({
         writeDate: { type: Date, default: Date.now }
     }],
     count:{ type:Number, default: 0 },
-    like :{ type:Number, default: 0 }
+    like :{ type:Number, default: 0 },
+    attach:{type:String}
 });
 
 postSchema.virtual('createdDate').get(function() {

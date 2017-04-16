@@ -2,14 +2,19 @@
 
 var express = require('express');
 var Post = require('../models/Post');
+var fs = require('fs');
 var multer = require('multer');
 
 var router = express.Router();
 
+var upload = multer({
+    dest: '/tmp/'
+});
+
 // Index
 router.get('/', function (req, res) {
     //현재 페이지	
-    var curPage = req.params.curPage;
+    var curPage = req.query.curPage;
     if (curPage == null) {
         curPage = 1;
     }
@@ -89,12 +94,15 @@ router.get('/:id/edit', function (req, res) {
 });
 
 // Create
-router.post('/', function (req, res) {
+router.post('/', upload.array('attach'), function (req, res) {
 
     //for (var i = 0; i < 1000; i++) {
     // 	req.body.title = "게시판 테스트 데이터 : " + i;
     // 	Post.create(req.body);
-    //}
+    //}    
+
+    var upFile = req.files;
+    
 
     Post.create(req.body, function (err, post) {
         if (err) res.json(err);
@@ -138,7 +146,6 @@ router.delete('/:id', function (req, res) {
         res.redirect('/posts');
     });
 });
-
 
 //Comment - Create
 router.post('/comment/:id', function (req, res) {
@@ -197,6 +204,5 @@ router.delete('/:id/comment/:com_id', function (req, res) {
         });
     });
 });
-
 
 module.exports = router;
