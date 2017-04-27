@@ -8,7 +8,7 @@ var multer = require('multer');
 var router = express.Router();
 
 var upload = multer({
-    dest: '/tmp/'
+    dest: 'tmp/'
 });
 
 // Index
@@ -100,11 +100,17 @@ router.post('/', upload.array('attach'), function (req, res) {
     // 	req.body.title = "게시판 테스트 데이터 : " + i;
     // 	Post.create(req.body);
     //}    
-
-    var upFile = req.files;
     
 
-    Post.create(req.body, function (err, post) {
+    var upFile = req.files;    
+
+    if(isSaved(upFile)) {
+        console.log("success");
+    } else {
+        console.log("failed");
+    }
+
+    Post.create(req.body, function (err, post) {        
         if (err) res.json(err);
         res.redirect('/posts');
     });
@@ -206,3 +212,35 @@ router.delete('/:id/comment/:com_id', function (req, res) {
 });
 
 module.exports = router;
+
+function isSaved(upFile){
+    var savedFile = upFile;
+    var count = 0;
+
+    if(savedFile != null) {
+        for(var i=0; i<savedFile.length;i++) {
+            if(fs.statSync(getDirname(1) + savedFile[i].path).isFile()) {
+                count++;
+            };
+        }
+        if(count == savedFile.length) {
+            return true;            
+        } else {
+            return false;
+        }
+    } else {
+        return true;
+    }
+}
+
+function getDirname(num) {
+    var order = num;
+    var getdirname = __dirname.split('/');
+    var result = '';
+
+    for(var i=0; i<getdirname.length-order;i++){
+        result += dirname[i] + '/';
+    }
+
+    return result;
+}
