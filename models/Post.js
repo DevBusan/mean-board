@@ -15,7 +15,11 @@ var postSchema = mongoose.Schema({
     }],
     count:{ type:Number, default: 0 },
     like :{ type:Number, default: 0 },
-    attach:{type:String}
+    attach:[{
+        uploadFilename: { type:String },
+        originFilename: { type:String },
+        paht: {type:String}
+    }]
 });
 
 postSchema.virtual('createdDate').get(function() {

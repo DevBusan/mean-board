@@ -101,19 +101,30 @@ router.post('/', upload.array('attach'), function (req, res) {
     // 	Post.create(req.body);
     //}    
     
-
     var upFile = req.files;    
 
     if(isSaved(upFile)) {
         console.log("success");
+        var renaming = renameUploadFile(upFile);
+
+        for(var i = 0; i < upFile.length; i++) {
+            // fs.rename(renaming.tmpname[i], renaming.fsname[i], function(err) {
+            //     if (err) {
+            //         console.log(err);
+            //         return;
+            //     }
+            // })
+        }                       
+        
     } else {
         console.log("failed");
     }
-
-    Post.create(req.body, function (err, post) {        
+    
+    Post.create(req.body, function (err, post) {
         if (err) res.json(err);
         res.redirect('/posts');
     });
+    
 });
 
 // Update
@@ -213,6 +224,9 @@ router.delete('/:id/comment/:com_id', function (req, res) {
 
 module.exports = router;
 
+
+//함수들 모음
+//파일 저장 체크
 function isSaved(upFile){
     var savedFile = upFile;
     var count = 0;
@@ -233,6 +247,7 @@ function isSaved(upFile){
     }
 }
 
+//폴더명 찾기
 function getDirname(num) {
     var order = num;
     var getdirname = __dirname.split('/');
@@ -243,4 +258,35 @@ function getDirname(num) {
     }
 
     return result;
+}
+
+//업로드 파일 rename
+function renameUploadFile(upFile) {
+    var uploadFile = {};
+
+    var tmpPath = [];
+    var tmpType = [];
+    var index = [];
+    var rename = [];
+    var fileName = [];
+    var fullName = [];
+    var fsName = [];
+
+    for (var i = 0; i < upFile.length; i++) {
+        tmpPath[i] = upFile[i].path;
+        tmpType[i] = upFile[i].mimetype.split('/')[1];
+        index[i] = tmpPath[i].split('/').length;
+        rename[i] = tmpPath[i].split('/')[index[i]-1];
+        //fileName[i] = "_" + rename[i] + "." + tmpType[i];
+        fileName[i] = rename[i];
+        fullName[i] = upFile[i].originalname;
+        fsName[i] = getDirname(1) +"Upload/"+fullName[i];
+    }
+
+    uploadFile.tmpname = tmpPath;
+    uploadFile.filename = fileName;
+    uploadFile.fullname = fullName;
+    uploadFile.fsname = fsName;
+
+    return uploadFile;
 }
