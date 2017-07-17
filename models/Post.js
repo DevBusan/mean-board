@@ -18,7 +18,7 @@ var postSchema = mongoose.Schema({
     attach:[{
         uploadFilename: { type:String },
         originFilename: { type:String },
-        paht: {type:String}
+        path: {type:String}
     }]
 });
 

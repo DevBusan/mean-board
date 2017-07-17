@@ -100,30 +100,64 @@ router.post('/', upload.array('attach'), function (req, res) {
     // 	req.body.title = "게시판 테스트 데이터 : " + i;
     // 	Post.create(req.body);
     //}    
-    
-    var upFile = req.files;    
 
-    if(isSaved(upFile)) {
-        console.log("success");
-        var renaming = renameUploadFile(upFile);
 
-        for(var i = 0; i < upFile.length; i++) {
-            // fs.rename(renaming.tmpname[i], renaming.fsname[i], function(err) {
-            //     if (err) {
-            //         console.log(err);
-            //         return;
-            //     }
-            // })
-        }                       
+//    Post = req.body;
+    Post.title = req.body.title;
+    Post.body = req.body.body;    
         
-    } else {
-        console.log("failed");
-    }
-    
-    Post.create(req.body, function (err, post) {
-        if (err) res.json(err);
+    // title: { type: String, required: true },
+    // body: { type: String },
+    // createdAt: { type: Date, default: Date.now },
+    // updatedAt: { type: Date },
+    // comments: [{
+    //     writer: { type: String },
+    //     memo: { type: String },
+    //     email: { type: String },
+    //     writeDate: { type: Date, default: Date.now }
+    // }],
+    // count:{ type:Number, default: 0 },
+    // like :{ type:Number, default: 0 },
+    // attach:[{
+    //     uploadFilename: { type:String },
+    //     originFilename: { type:String },
+    //     path: {type:String}
+
+
+    Post.save(function(err) {
+        if(err) throw err;
+        //Post.findOne({_id:Post._id},)
         res.redirect('/posts');
-    });
+    })
+    
+    // var upFile = req.files;    
+
+    // if(isSaved(upFile)) {
+    //     console.log("success");
+    //     var renaming = renameUploadFile(upFile);
+
+    //     for(var i = 0; i < upFile.length; i++) {
+    //         // fs.rename(renaming.tmpname[i], renaming.fsname[i], function(err) {
+    //         //     if (err) {
+    //         //         console.log(err);
+    //         //         return;
+    //         //     }
+    //         // })
+        
+            
+    //     uploadFilename
+    //     originFilename
+    //     path
+    //     }                       
+        
+    // } else {
+    //     console.log("failed");
+    // }   
+    
+    // Post.create(req.body, function (err, post) {
+    //     if (err) res.json(err);
+    //     res.redirect('/posts');
+    // });
     
 });
 
