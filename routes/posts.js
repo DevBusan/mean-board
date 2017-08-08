@@ -101,64 +101,41 @@ router.post('/', upload.array('attach'), function (req, res) {
     // 	Post.create(req.body);
     //}    
 
+    var newPost = new Post;
 
-//    Post = req.body;
-    Post.title = req.body.title;
-    Post.body = req.body.body;    
-        
-    // title: { type: String, required: true },
-    // body: { type: String },
-    // createdAt: { type: Date, default: Date.now },
-    // updatedAt: { type: Date },
-    // comments: [{
-    //     writer: { type: String },
-    //     memo: { type: String },
-    //     email: { type: String },
-    //     writeDate: { type: Date, default: Date.now }
-    // }],
-    // count:{ type:Number, default: 0 },
-    // like :{ type:Number, default: 0 },
-    // attach:[{
-    //     uploadFilename: { type:String },
-    //     originFilename: { type:String },
-    //     path: {type:String}
+    newPost.title = req.body.title;
+    newPost.body = req.body.body;        
+  
+    var upFile = req.files;
 
+    if(isSaved(upFile)) {
+        console.log("success");
+        //var renaming = renameUploadFile(upFile);
 
-    Post.save(function(err) {
-        if(err) throw err;
-        //Post.findOne({_id:Post._id},)
-        res.redirect('/posts');
-    })
-    
-    // var upFile = req.files;    
-
-    // if(isSaved(upFile)) {
-    //     console.log("success");
-    //     var renaming = renameUploadFile(upFile);
-
-    //     for(var i = 0; i < upFile.length; i++) {
-    //         // fs.rename(renaming.tmpname[i], renaming.fsname[i], function(err) {
-    //         //     if (err) {
-    //         //         console.log(err);
-    //         //         return;
-    //         //     }
-    //         // })
-        
+        for(var i = 0; i < upFile.length; i++) {
             
-    //     uploadFilename
-    //     originFilename
-    //     path
-    //     }                       
         
-    // } else {
-    //     console.log("failed");
-    // }   
+            newPost.attach.push({ 
+                uploadFilename : upFile[i].filename,
+                originFilename : upFile[i].originalname,
+                path : upFile[i].destination
+            });                
+        }                               
+    
+    }   
     
     // Post.create(req.body, function (err, post) {
     //     if (err) res.json(err);
     //     res.redirect('/posts');
     // });
     
+    newPost.save(function(err) {
+        if(err) throw err;
+        //Post.findOne({_id:Post._id},)
+        res.redirect('/posts');
+    })
+    
+
 });
 
 // Update
@@ -317,10 +294,10 @@ function renameUploadFile(upFile) {
         fsName[i] = getDirname(1) +"Upload/"+fullName[i];
     }
 
-    uploadFile.tmpname = tmpPath;
-    uploadFile.filename = fileName;
-    uploadFile.fullname = fullName;
-    uploadFile.fsname = fsName;
+    uploadFile.tmpname = tmpPath;   //tmp/asf1234sf
+    uploadFile.filename = fileName; //tmp/asf1234sf
+    uploadFile.fullname = fullName; //캡춰.png
+    uploadFile.fsname = fsName;     //upload/캡춰.png
 
     return uploadFile;
 }
