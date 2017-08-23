@@ -113,8 +113,7 @@ router.post('/', upload.array('attach'), function (req, res) {
         //var renaming = renameUploadFile(upFile);
 
         for(var i = 0; i < upFile.length; i++) {
-            
-        
+                    
             newPost.attach.push({ 
                 uploadFilename : upFile[i].filename,
                 originFilename : upFile[i].originalname,

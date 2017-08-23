@@ -15,7 +15,8 @@
 		<table class="table table-striped table-hover">
 			<thead>
 				<tr>
-					<th width="100px">No.</th>
+					<th width="50px">No.</th>
+					<th width="50px">Attach</th>
 					<th>Title</th>
 					<th width="150px">Created</th>
 					<th width="100px">Count</th>
@@ -31,6 +32,7 @@
 				<% posts.forEach(function(post, index) { %>
 				<tr>
 					<td><%= startIndex - index %></td>
+					<td><%= post.attach.length == 0 ? "": post.attach.length %></td>
 					<td><a href="/posts/<%= post._id %>"><%= post.title %> <font color="orangered">[<%= post.comments.length %>]</font> </a></td>
 					<td><%= post.createdDate %></td>
 					<td><%= post.count %></td>
