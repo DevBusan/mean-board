@@ -16,8 +16,8 @@ var postSchema = mongoose.Schema({
     count:{ type:Number, default: 0 },
     like :{ type:Number, default: 0 },
     attach:[{
-        uploadFilename: { type:String },
-        originFilename: { type:String },
+        uuid: { type:String },
+        filename: { type:String },
         path: {type:String}
     }]
 });

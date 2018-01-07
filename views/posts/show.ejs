@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <% include ../partials/head %>
-        <script>
+        <script>         
+
             function com_Edit(eventEl) {
                 var sElement = eventEl.parentElement.parentElement.nextElementSibling.nextElementSibling.children[0];
                 var tElement = eventEl.parentElement.parentElement.nextElementSibling.nextElementSibling.children[1];
@@ -43,6 +44,11 @@
                 }
 
             }
+
+            function downloadFiles(pID, pUUID) {
+                location.href="download/"+ pID + "/" + pUUID;
+            }
+
         </script>
 </head>
 <body>
@@ -55,16 +61,21 @@
                     </h3>
                 </div>
                 <div class="post-info">
-                    <div><span>Created</span> :
-                        <%= post.createdDate %>
-                            <%= post.createdTime %>
+                    <div>
+                        <span>Created</span> : <%= post.createdDate %> <%= post.createdTime %>
                     </div>
                     <% if(post.updatedAt) { %>
-                        <div><span>Updated</span> :
-                            <%= post.updatedDate %>
-                                <%= post.updatedTime %>
+                        <div>
+                            <span>Updated</span> :<%= post.updatedDate %> <%= post.updatedTime %>
                         </div>
-                        <% } %>
+                    <% } %>
+                    <div id="download-file">
+                            <% post.attach.forEach(function(files, index) { %>
+                                <button type="button" onclick="downloadFiles('<%= post._id %>','<%= files._id %>')" >
+                                    <span id='downloadFile'><%= files.filename %></span>
+                                </button><br>
+                            <%}) %>                        
+                    </div>
                 </div>
                 <div class="post-body body">                    
                     <%- post.body %>                    

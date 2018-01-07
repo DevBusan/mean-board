@@ -81,6 +81,22 @@ router.get('/:id', function (req, res) {
     });
 });
 
+
+// File Download
+router.get('/download/:id/:fileid', function (req, res) {
+    Post.findOne({
+        _id: req.params.id,        
+    }, function (err, post) {
+        if (err) res.json(err);
+
+        var file = post.attach.id(req.params.fileid);
+
+        res.download(file.path + file.uuid, file.filename);
+        console.log(file.filename);        
+    });
+});
+
+
 // Edit
 router.get('/:id/edit', function (req, res) {
     Post.findOne({
@@ -115,8 +131,8 @@ router.post('/', upload.array('attach'), function (req, res) {
         for(var i = 0; i < upFile.length; i++) {
                     
             newPost.attach.push({ 
-                uploadFilename : upFile[i].filename,
-                originFilename : upFile[i].originalname,
+                uuid : upFile[i].filename,
+                filename : upFile[i].originalname,
                 path : upFile[i].destination
             });                
         }                               
