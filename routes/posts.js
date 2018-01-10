@@ -2,13 +2,19 @@
 
 var express = require('express');
 var Post = require('../models/Post');
+var fs = require('fs');
+var multer = require('multer');
 
 var router = express.Router();
+
+var upload = multer({
+    dest: 'tmp/'
+});
 
 // Index
 router.get('/', function (req, res) {
     //현재 페이지	
-    var curPage = req.param("curPage");
+    var curPage = req.query.curPage;
     if (curPage == null) {
         curPage = 1;
     }
@@ -75,6 +81,22 @@ router.get('/:id', function (req, res) {
     });
 });
 
+
+// File Download
+router.get('/download/:id/:fileid', function (req, res) {
+    Post.findOne({
+        _id: req.params.id,        
+    }, function (err, post) {
+        if (err) res.json(err);
+
+        var file = post.attach.id(req.params.fileid);
+
+        res.download(file.path + file.uuid, file.filename);
+        console.log(file.filename);        
+    });
+});
+
+
 // Edit
 router.get('/:id/edit', function (req, res) {
     Post.findOne({
@@ -88,17 +110,47 @@ router.get('/:id/edit', function (req, res) {
 });
 
 // Create
-router.post('/', function (req, res) {
+router.post('/', upload.array('attach'), function (req, res) {
 
     //for (var i = 0; i < 1000; i++) {
     // 	req.body.title = "게시판 테스트 데이터 : " + i;
     // 	Post.create(req.body);
-    //}
+    //}    
 
-    Post.create(req.body, function (err, post) {
-        if (err) res.json(err);
+    var newPost = new Post;
+
+    newPost.title = req.body.title;
+    newPost.body = req.body.body;        
+  
+    var upFile = req.files;
+
+    if(isSaved(upFile)) {
+        console.log("success");
+        //var renaming = renameUploadFile(upFile);
+
+        for(var i = 0; i < upFile.length; i++) {
+                    
+            newPost.attach.push({ 
+                uuid : upFile[i].filename,
+                filename : upFile[i].originalname,
+                path : upFile[i].destination
+            });                
+        }                               
+    
+    }   
+    
+    // Post.create(req.body, function (err, post) {
+    //     if (err) res.json(err);
+    //     res.redirect('/posts');
+    // });
+    
+    newPost.save(function(err) {
+        if(err) throw err;
+        //Post.findOne({_id:Post._id},)
         res.redirect('/posts');
-    });
+    })
+    
+
 });
 
 // Update
@@ -137,7 +189,6 @@ router.delete('/:id', function (req, res) {
         res.redirect('/posts');
     });
 });
-
 
 //Comment - Create
 router.post('/comment/:id', function (req, res) {
@@ -197,5 +248,71 @@ router.delete('/:id/comment/:com_id', function (req, res) {
     });
 });
 
-
 module.exports = router;
+
+
+//함수들 모음
+//파일 저장 체크
+function isSaved(upFile){
+    var savedFile = upFile;
+    var count = 0;
+
+    if(savedFile != null) {
+        for(var i=0; i<savedFile.length;i++) {
+            if(fs.statSync(getDirname(1) + savedFile[i].path).isFile()) {
+                count++;
+            };
+        }
+        if(count == savedFile.length) {
+            return true;            
+        } else {
+            return false;
+        }
+    } else {
+        return true;
+    }
+}
+
+//폴더명 찾기
+function getDirname(num) {
+    var order = num;
+    var getdirname = __dirname.split('/');
+    var result = '';
+
+    for(var i=0; i<getdirname.length-order;i++){
+        result += dirname[i] + '/';
+    }
+
+    return result;
+}
+
+//업로드 파일 rename
+function renameUploadFile(upFile) {
+    var uploadFile = {};
+
+    var tmpPath = [];
+    var tmpType = [];
+    var index = [];
+    var rename = [];
+    var fileName = [];
+    var fullName = [];
+    var fsName = [];
+
+    for (var i = 0; i < upFile.length; i++) {
+        tmpPath[i] = upFile[i].path;
+        tmpType[i] = upFile[i].mimetype.split('/')[1];
+        index[i] = tmpPath[i].split('/').length;
+        rename[i] = tmpPath[i].split('/')[index[i]-1];
+        //fileName[i] = "_" + rename[i] + "." + tmpType[i];
+        fileName[i] = rename[i];
+        fullName[i] = upFile[i].originalname;
+        fsName[i] = getDirname(1) +"Upload/"+fullName[i];
+    }
+
+    uploadFile.tmpname = tmpPath;   //tmp/asf1234sf
+    uploadFile.filename = fileName; //tmp/asf1234sf
+    uploadFile.fullname = fullName; //캡춰.png
+    uploadFile.fsname = fsName;     //upload/캡춰.png
+
+    return uploadFile;
+}
