@@ -10,13 +10,14 @@ router.route("/").get(function(req, res) {
 	.sort({username: 1})
 	.exec(function(err, users) {
 		if (err) return res.json(err);
-		res.render('users/index', {users: users});
+		res.render('users/list', {users: users});
 	});
 });
 
+
 // new
 router.get('/new', function(req, res) {
-	res.render('users/new', {user: {}});
+	res.render('users/new');
 });
 
 // create
