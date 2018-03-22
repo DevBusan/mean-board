@@ -3,10 +3,11 @@
 var mongoose = require('mongoose');
 
 var userSchema = mongoose.Schema({
-	username: {type: String, required: [true, "Username is required!"], unique:true},
-	password: {type: String, required: [true, "Password is required!"], select:false},
-	name: {type: String, required: [true, "Name is required!"]},
-	email: {type: String}		
+	userid: {type: String, required:[true, "UserID is required!"], unique:true},
+	password: {type: String , required: [true, "Password is required!"]},
+	username: {type: String, required: [true, "Name is required!"]},
+	email: {type: String},
+	registedate: {type: Date, default: Date.now}
 }, {
 	toObject: {virtuals: true}
 });

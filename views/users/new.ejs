@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">    
+    <title>User - New</title>
+    <% include ../partials/head %>
+    <script>
+        function addUser(pThis){
+            var pw = $('#password').val();
+            var pwc = $('#password_confirm').val();
+
+            if(pw != pwc) {
+                alert('패스워드가 다릅니다.');
+                return false;
+            }            
+
+            pThis.submit();
+        }
+
+        function checkID(pCtrl) {
+
+            var param = pCtrl.value.trim();    
+            
+            if(param != '') {
+                $.ajax({ 
+                    url : "/users/checkID/" + pCtrl.value,
+                    success : function(result){
+                        if(result == 0){
+                            $('#spnCheckID').html("사용할 수 있는 아이디 입니다.");
+                        } else {
+                            $('#spnCheckID').html("사용할 수 없는 아이디 입니다.");
+                        }
+                    },
+                    error : function(xhr){
+                        alert("An error occured : " + xhr.status + " " + xhr.statusText);
+                    }                          
+                });            
+            }
+        }
+    </script>
+</head>
+<body>
+    <% include ../partials/nav %>
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h4>Create Account</h4></div>
+            <div class="panel-body">
+                <form action="/users" method="post" class="form-horizontal" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="userid">ID</label>                        
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" id="userid" name="userid" placeholder="Enter ID" autofocus
+                                required onblur ="checkID(this)">
+                        </div>
+                        <span id="spnCheckID"></span>
+                    </div>                                        
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="password">Password</label>                        
+                        <div class="col-sm-4">
+                           <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password" required pattern="^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{4,12}$">
+                        </div>
+                        <div>
+                            <h4><small>※ 4~12자리,영문,숫자,특수문자 포함</small></h4>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="password_confirm">Password Confirm</label>                        
+                        <div class="col-sm-4">
+                            <input type="password" class="form-control" id="password_confirm" name="password_confirm" placeholder="Enter Password" required>                        
+                        </div>                    
+                    </div>          
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="username">User Name</label>                        
+                        <div class="col-sm-4">
+                           <input type="text" class="form-control" id="username" name="username" placeholder="Enter Name" required>                        
+                        </div>
+                    </div>    
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="email">E-mail</label>                        
+                        <div class="col-sm-4">
+                           <input type="email" class="form-control" id="email" name="email" placeholder="Enter E-mail" required>                        
+                        </div>
+                    </div>                        
+                    <div class="form-group"> 
+                        <div class="col-sm-offset-2 col-sm-10">
+                          <button type="submit" class="btn btn-default">Submit</button>
+                          <button class="btn btn-default">Cancel</button>
+                        </div>                                                
+                      </div>
+                </form>
+            </div>
+        </div>
+    </div>  
+</body>
+</html>

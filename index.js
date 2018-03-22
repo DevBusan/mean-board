@@ -35,6 +35,7 @@ app.use(methodOverride('_method'));
 app.use('/', require('./routes/home'));
 app.use('/posts', require('./routes/posts'));
 app.use('/tasks', require('./routes/tasks'));
+app.use('/users', require('./routes/users'))
 app.use(express.static(__dirname + '/public'));
 
 //common utils(need common file)

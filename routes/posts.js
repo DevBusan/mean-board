@@ -185,7 +185,8 @@ router.delete('/:id', function (req, res) {
     Post.remove({
         _id: req.params.id
     }, function (err, post) {
-        if (err) res.json(err);
+        if (err) res.json(err);       
+
         res.redirect('/posts');
     });
 });
